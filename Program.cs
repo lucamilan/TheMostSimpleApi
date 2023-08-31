@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,5 +15,6 @@ app.UseSwaggerUI(c =>
    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Simple API V1");
 });
 app.MapGet("/", () => "The Ultimate Question of Life, the Universe, and Everything is: 42");
+app.MapGet("/version", () => Assembly.GetExecutingAssembly().GetName().Version?.ToString());
 
 app.Run();
