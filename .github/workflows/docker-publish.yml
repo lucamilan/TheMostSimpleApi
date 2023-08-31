@@ -2,6 +2,9 @@ name: Push Docker Image to Docker Hub
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*"
 
 env:
   REGISTRY: docker.io
