@@ -1,23 +1,21 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# Pass the VERSION argument during build
-ARG VERSION=latest
-
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+RUN echo "Version is $VERSION"
 WORKDIR /src
 COPY ["TheMostSimpleApi.csproj", "."]
 RUN dotnet restore "./TheMostSimpleApi.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "TheMostSimpleApi.csproj" -c Release -o /app/build
+ARG version=1.0.0
+ENV VERSION $version
+RUN dotnet build "TheMostSimpleApi.csproj" -c Release -o /app/build /p:Version="$VERSION"
 
 FROM build AS publish
-RUN dotnet publish "TheMostSimpleApi.csproj" -c Release -o /app/publish /p:UseAppHost=false /p:Version:$VERSION
+RUN dotnet publish "TheMostSimpleApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

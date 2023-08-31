@@ -25,7 +25,7 @@ jobs:
         id: values
         env: 
           TAG: ${{steps.vars.outputs.tag}}
-        run: echo "version=$TAG:1" >> $GITHUB_OUTPUT
+        run: echo "version=${TAG:1}" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -50,4 +50,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            VERSION=${{ steps.values.outputs.version }}
+            version=${{ steps.values.outputs.version }}
